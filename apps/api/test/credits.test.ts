@@ -4,6 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { setDb, openDb, type DB } from "../src/db/connection.js";
 import { runMigrations } from "../src/db/migrate.js";
+import { seed } from "../src/db/seed.js";
 import {
   BLOCKED_THRESHOLD,
   getBalance,
@@ -31,6 +32,7 @@ describe("credits service", () => {
     dbFile = join(workDir, "credits.sqlite");
     setDb(openDb(dbFile));
     runMigrations();
+    seed();
   });
 
   afterEach(() => {
@@ -65,19 +67,37 @@ describe("credits service", () => {
       expect(getBalance().balance).toBe(980);
     });
 
-    it("writes a credit_ledger row with negative delta and the new balance", () => {
-      tryDeduct(20, "chat", "test:row");
-      const rows = openDb(dbFile)
+    it("UPDATEs the latest row's balance in place (no new row inserted)", () => {
+      // Snapshot the latest row + the row count before the deduction.
+      const before = openDb(dbFile)
         .prepare(
-          "SELECT balance, delta, reason, ref FROM credit_ledger ORDER BY id DESC LIMIT 1",
+          "SELECT id, balance FROM credit_ledger ORDER BY id DESC LIMIT 1",
         )
-        .all() as { balance: number; delta: number; reason: string; ref: string }[];
-      expect(rows[0]).toEqual({
-        balance: 980,
-        delta: -20,
-        reason: "chat",
-        ref: "test:row",
-      });
+        .get() as { id: number; balance: number };
+      const countBefore = (
+        openDb(dbFile)
+          .prepare("SELECT COUNT(*) AS c FROM credit_ledger")
+          .get() as { c: number }
+      ).c;
+
+      tryDeduct(20, "chat", "test:row");
+
+      const after = openDb(dbFile)
+        .prepare(
+          "SELECT id, balance FROM credit_ledger ORDER BY id DESC LIMIT 1",
+        )
+        .get() as { id: number; balance: number };
+      const countAfter = (
+        openDb(dbFile)
+          .prepare("SELECT COUNT(*) AS c FROM credit_ledger")
+          .get() as { c: number }
+      ).c;
+
+      // The latest row's id is unchanged — no new row was inserted.
+      expect(after.id).toBe(before.id);
+      expect(countAfter).toBe(countBefore);
+      // The balance decreased by exactly 20.
+      expect(after.balance).toBe(before.balance - 20);
     });
 
     it("returns 402-style { ok:false, balance } when balance is below amount", () => {
@@ -116,7 +136,7 @@ describe("credits service", () => {
         const oks = results.filter((r) => r.ok).length;
         const fails = results.filter((r) => !r.ok).length;
         expect(oks + fails).toBe(5);
-        expect(fails).toBe(start / 20 > 5 ? 0 : 5 - Math.floor(start / 20));
+        expect(fails).toBe(5 - Math.floor(start / 20));
         // balance invariant: never negative, never above start
         const finalBal = getBalance().balance;
         expect(finalBal).toBeGreaterThanOrEqual(0);

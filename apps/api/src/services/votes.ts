@@ -5,6 +5,7 @@
 import { config } from "../config.js";
 import { getDb } from "../db/connection.js";
 import { broadcaster } from "../sse/broadcaster.js";
+import { recordGrant } from "./credits.js";
 
 /** Read a numeric vote count from any of the accepted JSON shapes. */
 export function extractVotes(payload: unknown): number | null {
@@ -69,9 +70,11 @@ export async function fetchLiveVotes(
  * and broadcast a 'vote' SSE event.
  *
  * The ledger invariant: the latest row's `balance` is the current pool.
- * A positive vote delta INSERTs a new row with `delta = +100 * delta_votes`
- * and a balance of `prev_balance + 100 * delta_votes`. A non-positive
- * delta records the snapshot but writes no ledger row.
+ * A positive vote delta calls into `recordGrant()` from the credits
+ * service, which INSERTs a new row with `delta = +100 * delta_votes`
+ * and broadcasts a `credits` SSE event on the first edge-crossing of
+ * the 20-credit threshold. A non-positive delta records the snapshot
+ * but writes no ledger row.
  */
 export function recordPoll(
   votes: number,
@@ -97,7 +100,7 @@ export function recordPoll(
      VALUES (?, ?, ?)`,
   ).run(votes, rawJson, nowIso);
 
-  let outcome: PollOutcome = {
+  const outcome: PollOutcome = {
     current: votes,
     delta,
     observedAt: nowIso,
@@ -106,15 +109,7 @@ export function recordPoll(
 
   if (delta > 0) {
     const grant = config.CREDIT_PER_VOTE * delta;
-    const lastBalance = db
-      .prepare(`SELECT balance FROM credit_ledger ORDER BY id DESC LIMIT 1`)
-      .get() as { balance: number } | undefined;
-    const newBalance = (lastBalance?.balance ?? 0) + grant;
-    db.prepare(
-      `INSERT INTO credit_ledger (balance, delta, reason, ref)
-       VALUES (?, ?, 'vote', ?)`,
-    ).run(newBalance, grant, `votes+${delta}`);
-    outcome = { ...outcome };
+    recordGrant(grant, "vote", `votes+${delta}`, db);
   }
 
   // Broadcast on every poll (not just deltas) so the ticker UI knows

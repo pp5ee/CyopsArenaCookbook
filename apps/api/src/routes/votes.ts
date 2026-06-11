@@ -9,7 +9,6 @@
 import { Router, type Request, type Response } from "express";
 import { broadcaster, type SseEvent } from "../sse/broadcaster.js";
 import { votesSummary } from "../services/votes.js";
-import { config } from "../config.js";
 
 const PING_MS = 25_000;
 
@@ -72,8 +71,4 @@ votesRouter.get("/stream", (req: Request, res: Response) => {
   req.on("close", cleanup);
   req.on("aborted", cleanup);
   res.on("close", cleanup);
-
-  // Touch config to silence the unused-import warning when this is
-  // compiled in isolation.
-  void config;
 });

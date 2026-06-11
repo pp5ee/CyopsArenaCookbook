@@ -1,13 +1,15 @@
-// Express bootstrap. Wires CORS, JSON, the votes router, the health
-// route, and — when run directly — boots the DB and starts the vote
-// poller. The exported `createApp()` is pure: it does not touch the DB
-// or the network, so vitest can use it as-is.
+// Express bootstrap. Wires CORS, JSON, the routers, the health route,
+// and — when run directly — boots the DB and starts the vote poller.
+// The exported `createApp()` is pure: it does not touch the DB or the
+// network, so vitest can use it as-is.
 import express, { type Express } from "express";
 import cors from "cors";
 import { config } from "./config.js";
 import { runMigrations } from "./db/migrate.js";
 import { seed } from "./db/seed.js";
 import { votesRouter } from "./routes/votes.js";
+import { creditsRouter } from "./routes/credits.js";
+import { chatRouter } from "./routes/chat.js";
 import { startVotePoller, stopVotePoller } from "./jobs/votePoller.js";
 
 export function createApp(): Express {
@@ -25,6 +27,8 @@ export function createApp(): Express {
   });
 
   app.use("/api/votes", votesRouter);
+  app.use("/api/credits", creditsRouter);
+  app.use("/api/chat", chatRouter);
 
   return app;
 }

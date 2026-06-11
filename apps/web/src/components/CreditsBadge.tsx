@@ -40,7 +40,7 @@ export function CreditsBadge(): JSX.Element {
   if (err && !bal) {
     return (
       <span
-        className="rounded border border-rose-200 bg-rose-50 px-2 py-0.5 text-xs text-rose-700"
+        className="rounded border border-arena-danger/30 bg-arena-danger-dim/30 px-2 py-0.5 text-xs text-arena-danger"
         title={err}
       >
         {t("common.error")}
@@ -49,7 +49,7 @@ export function CreditsBadge(): JSX.Element {
   }
   if (!bal) {
     return (
-      <span className="rounded border border-slate-200 bg-slate-50 px-2 py-0.5 text-xs text-slate-500">
+      <span className="rounded border border-arena-border bg-arena-surface px-2 py-0.5 text-xs text-arena-muted">
         {t("common.loading")}
       </span>
     );
@@ -62,8 +62,8 @@ export function CreditsBadge(): JSX.Element {
       className={
         "rounded border px-2 py-0.5 text-xs font-medium " +
         (bal.blocked
-          ? "border-rose-300 bg-rose-50 text-rose-700"
-          : "border-emerald-300 bg-emerald-50 text-emerald-700")
+          ? "border-arena-danger/50 bg-arena-danger-dim/30 text-arena-danger"
+          : "border-arena-success/50 bg-arena-success-dim/30 text-arena-success")
       }
       title={bal.blocked ? t("credits.blocked") : `${bal.balance} ${t("credits.label")}`}
     >

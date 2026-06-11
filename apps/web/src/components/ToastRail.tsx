@@ -33,7 +33,7 @@ export function ToastRail(): JSX.Element {
           <div
             key={toast.id}
             data-testid="toast"
-            className="pointer-events-auto flex items-start gap-2 rounded-lg border border-slate-200 bg-white/95 p-3 shadow-lg backdrop-blur animate-[slidein_0.25s_ease-out]"
+            className="pointer-events-auto flex items-start gap-2 rounded-lg border border-arena-border bg-arena-surface/95 p-3 shadow-lg backdrop-blur animate-[slidein_0.25s_ease-out]"
           >
             <span
               aria-hidden="true"
@@ -41,18 +41,18 @@ export function ToastRail(): JSX.Element {
                 "mt-1 inline-block h-2 w-2 shrink-0 rounded-full " +
                 (toast.kind === "delta"
                   ? toast.delta && toast.delta > 0
-                    ? "bg-emerald-500"
-                    : "bg-slate-400"
+                    ? "bg-arena-success"
+                    : "bg-arena-muted"
                   : toast.kind === "credits-blocked"
-                    ? "bg-rose-500"
-                    : "bg-amber-500")
+                    ? "bg-arena-danger"
+                    : "bg-arena-warning")
               }
             />
-            <p className="flex-1 text-sm text-slate-800">{message}</p>
+            <p className="flex-1 text-sm text-arena-text">{message}</p>
             <button
               type="button"
               onClick={() => dismiss(toast.id)}
-              className="rounded p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+              className="rounded p-1 text-arena-muted hover:bg-arena-surface-hover hover:text-arena-text"
               aria-label={t("common.close")}
             >
               ×

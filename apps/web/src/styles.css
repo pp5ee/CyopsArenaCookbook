@@ -2,6 +2,48 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Global dark theme base ── */
+@layer base {
+  html {
+    background-color: #0a0e17;
+    color: #e2e8f0;
+  }
+  body {
+    background-color: #0a0e17;
+    color: #e2e8f0;
+    min-height: 100vh;
+  }
+  /* Override browser autofill backgrounds */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  textarea:-webkit-autofill,
+  textarea:-webkit-autofill:hover,
+  textarea:-webkit-autofill:focus,
+  select:-webkit-autofill,
+  select:-webkit-autofill:hover,
+  select:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0px 1000px #111827 inset;
+    -webkit-text-fill-color: #e2e8f0;
+  }
+}
+
+/* ── Neon glow utilities ── */
+@layer utilities {
+  .glow-accent {
+    box-shadow: 0 0 15px rgba(6, 182, 212, 0.35);
+  }
+  .glow-accent-lg {
+    box-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
+  }
+  .glow-text-accent {
+    text-shadow: 0 0 12px rgba(6, 182, 212, 0.6);
+  }
+  .glow-text-accent-lg {
+    text-shadow: 0 0 24px rgba(6, 182, 212, 0.8);
+  }
+}
+
 /* Toast slide-in keyframe for the Live Ticker right-rail. */
 @keyframes slidein {
   0% {

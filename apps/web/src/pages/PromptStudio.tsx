@@ -159,14 +159,14 @@ export function PromptStudio(): JSX.Element {
   return (
     <section className="space-y-6">
       <header>
-        <h1 className="text-2xl font-semibold text-slate-900">{t("prompt.title")}</h1>
-        <p className="mt-1 text-sm text-slate-600">{t("prompt.intro")}</p>
+        <h1 className="text-2xl font-semibold text-arena-text">{t("prompt.title")}</h1>
+        <p className="mt-1 text-sm text-arena-muted">{t("prompt.intro")}</p>
       </header>
 
       {(mode === "pick" || mode === "free") && (
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-          <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+          <div className="rounded-lg border border-arena-border bg-arena-surface p-5 shadow-sm">
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-arena-muted">
               {t("prompt.trackPicker")}
             </h2>
             <ul className="mt-3 space-y-2">
@@ -176,21 +176,21 @@ export function PromptStudio(): JSX.Element {
                     type="button"
                     data-testid={`track-${tr.id}`}
                     onClick={() => void startWithTrack(tr.id)}
-                    className="w-full rounded-md border border-slate-200 p-3 text-left transition-colors hover:border-indigo-400 hover:bg-indigo-50"
+                    className="w-full rounded-md border border-arena-border p-3 text-left transition-colors hover:border-arena-accent hover:bg-arena-surface-hover"
                   >
-                    <div className="font-medium text-slate-900">{t(tr.titleKey)}</div>
-                    <div className="mt-0.5 text-sm text-slate-600">{t(tr.blurbKey)}</div>
+                    <div className="font-medium text-arena-text">{t(tr.titleKey)}</div>
+                    <div className="mt-0.5 text-sm text-arena-muted">{t(tr.blurbKey)}</div>
                   </button>
                 </li>
               ))}
             </ul>
-            <p className="mt-3 text-xs text-slate-500">
+            <p className="mt-3 text-xs text-arena-muted">
               {t("prompt.startWithTrack")}
             </p>
           </div>
 
-          <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+          <div className="rounded-lg border border-arena-border bg-arena-surface p-5 shadow-sm">
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-arena-muted">
               {t("prompt.freeText")}
             </h2>
             <textarea
@@ -199,14 +199,14 @@ export function PromptStudio(): JSX.Element {
               onChange={(e) => setFreeText(e.target.value)}
               placeholder={t("prompt.freeTextPlaceholder")}
               rows={6}
-              className="mt-3 w-full rounded-md border border-slate-300 p-2 text-sm focus:border-indigo-500 focus:outline-none"
+              className="mt-3 w-full rounded-md border border-arena-border bg-arena-bg p-2 text-sm text-arena-text placeholder-arena-muted focus:border-arena-accent focus:outline-none"
             />
             <button
               type="button"
               data-testid="start-free-text"
               onClick={() => void startWithFreeText()}
               disabled={!freeText.trim()}
-              className="mt-3 inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-700 disabled:bg-slate-300"
+              className="mt-3 inline-flex items-center rounded-md bg-arena-accent px-4 py-2 text-sm font-medium text-arena-bg transition-colors hover:bg-arena-accent-glow disabled:bg-arena-border disabled:text-arena-muted"
             >
               {t("prompt.startFreeText")}
             </button>
@@ -218,31 +218,31 @@ export function PromptStudio(): JSX.Element {
         <div
           data-testid="stepper"
           data-step={running.stepIndex}
-          className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm"
+          className="rounded-lg border border-arena-border bg-arena-surface p-5 shadow-sm"
         >
           <div className="mb-3 flex items-center justify-between text-xs">
-            <span className="font-semibold uppercase tracking-wide text-slate-500">
+            <span className="font-semibold uppercase tracking-wide text-arena-muted">
               {running.stepName}
             </span>
-            <span className="text-slate-500">
+            <span className="text-arena-muted">
               {t("prompt.step", { step: running.stepIndex + 1 })}
             </span>
           </div>
           <p
             data-testid="current-question"
-            className="text-base text-slate-900"
+            className="text-base text-arena-text"
           >
             {running.question}
           </p>
           {running.history.length > 0 && (
             <ol
               data-testid="history"
-              className="mt-4 space-y-2 border-l-2 border-slate-200 pl-4 text-sm"
+              className="mt-4 space-y-2 border-l-2 border-arena-border pl-4 text-sm"
             >
               {running.history.map((qa, i) => (
                 <li key={i}>
-                  <div className="text-slate-500">Q: {qa.question}</div>
-                  <div className="text-slate-800">A: {qa.answer}</div>
+                  <div className="text-arena-muted">Q: {qa.question}</div>
+                  <div className="text-arena-text">A: {qa.answer}</div>
                 </li>
               ))}
             </ol>
@@ -252,7 +252,7 @@ export function PromptStudio(): JSX.Element {
             <div
               role="alert"
               data-testid="step-error"
-              className="mt-4 rounded border border-rose-200 bg-rose-50 p-3 text-sm text-rose-800"
+              className="mt-4 rounded border border-arena-danger/30 bg-arena-danger-dim/30 p-3 text-sm text-arena-danger"
             >
               {error}
             </div>
@@ -265,14 +265,14 @@ export function PromptStudio(): JSX.Element {
               onChange={(e) => setDraftAnswer(e.target.value)}
               placeholder={t("prompt.answerPlaceholder")}
               rows={3}
-              className="flex-1 rounded-md border border-slate-300 p-2 text-sm focus:border-indigo-500 focus:outline-none"
+              className="flex-1 rounded-md border border-arena-border bg-arena-bg p-2 text-sm text-arena-text placeholder-arena-muted focus:border-arena-accent focus:outline-none"
             />
             <button
               type="button"
               data-testid="submit-answer"
               onClick={() => void submitAnswer()}
               disabled={!draftAnswer.trim() || submitting}
-              className="self-end rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-700 disabled:bg-slate-300"
+              className="self-end rounded-md bg-arena-accent px-4 py-2 text-sm font-medium text-arena-bg transition-colors hover:bg-arena-accent-glow disabled:bg-arena-border disabled:text-arena-muted"
             >
               {submitting ? t("common.loading") : t("common.submit")}
             </button>
@@ -283,7 +283,7 @@ export function PromptStudio(): JSX.Element {
               type="button"
               data-testid="back-to-start"
               onClick={reset}
-              className="mt-3 text-xs text-slate-500 hover:text-slate-700"
+              className="mt-3 text-xs text-arena-muted hover:text-arena-accent"
             >
               {t("prompt.backToStart")}
             </button>
@@ -294,17 +294,17 @@ export function PromptStudio(): JSX.Element {
       {mode === "done" && finalPrompt && (
         <div
           data-testid="result"
-          className="rounded-lg border border-emerald-200 bg-emerald-50/40 p-5 shadow-sm"
+          className="rounded-lg border border-arena-success/50 bg-arena-success-dim/30 p-5 shadow-sm"
         >
-          <h2 className="text-lg font-semibold text-slate-900">{t("prompt.result")}</h2>
-          <p className="mt-1 text-sm text-slate-600">{t("prompt.resultHint")}</p>
+          <h2 className="text-lg font-semibold text-arena-text">{t("prompt.result")}</h2>
+          <p className="mt-1 text-sm text-arena-muted">{t("prompt.resultHint")}</p>
 
           <textarea
             data-testid="result-block"
             readOnly
             value={finalPrompt}
             rows={18}
-            className="mt-3 w-full rounded-md border border-slate-300 bg-white p-3 font-mono text-xs focus:outline-none"
+            className="mt-3 w-full rounded-md border border-arena-border bg-arena-bg p-3 font-mono text-xs text-arena-text focus:outline-none"
           />
 
           <div className="mt-3 flex flex-wrap gap-2">
@@ -312,7 +312,7 @@ export function PromptStudio(): JSX.Element {
               type="button"
               data-testid="copy"
               onClick={() => void copyToClipboard()}
-              className="inline-flex items-center rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50"
+              className="inline-flex items-center rounded-md border border-arena-border bg-arena-surface px-3 py-1.5 text-sm font-medium text-arena-text hover:bg-arena-surface-hover"
             >
               {copied ? t("common.copied") : t("common.copy")}
             </button>
@@ -321,14 +321,14 @@ export function PromptStudio(): JSX.Element {
               href="https://www.cyops.ai/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-700"
+              className="inline-flex items-center rounded-md bg-arena-accent px-3 py-1.5 text-sm font-medium text-arena-bg hover:bg-arena-accent-glow"
             >
               {t("common.openInCyops")}
             </a>
             <button
               type="button"
               onClick={reset}
-              className="ml-auto text-sm text-slate-500 hover:text-slate-700"
+              className="ml-auto text-sm text-arena-muted hover:text-arena-accent"
             >
               {t("prompt.backToStart")}
             </button>
@@ -339,13 +339,13 @@ export function PromptStudio(): JSX.Element {
       {mode === "error" && (
         <div
           data-testid="startup-error"
-          className="rounded-lg border border-rose-200 bg-rose-50 p-5 text-sm text-rose-800"
+          className="rounded-lg border border-arena-danger/30 bg-arena-danger-dim/30 p-5 text-sm text-arena-danger"
         >
           <p>{error ?? t("common.error")}</p>
           <button
             type="button"
             onClick={reset}
-            className="mt-3 rounded-md border border-rose-300 bg-white px-3 py-1.5 text-sm font-medium text-rose-700 hover:bg-rose-50"
+            className="mt-3 rounded-md border border-arena-danger/50 bg-arena-surface px-3 py-1.5 text-sm font-medium text-arena-danger hover:bg-arena-danger-dim/30"
           >
             {t("common.retry")}
           </button>
@@ -353,7 +353,7 @@ export function PromptStudio(): JSX.Element {
       )}
 
       {track && mode !== "done" && (
-        <p className="text-xs text-slate-500">
+        <p className="text-xs text-arena-muted">
           {t("prompt.trackPicker")}: <span className="font-mono">{track}</span>
         </p>
       )}

@@ -19,7 +19,7 @@ export function LangToggle(): JSX.Element {
         void i18n.changeLanguage(next);
         persistLocale(next);
       }}
-      className="rounded border border-slate-300 bg-white px-2 py-1 text-sm font-medium text-slate-700 hover:bg-slate-50"
+      className="rounded border border-arena-border bg-arena-surface px-2 py-1 text-sm font-medium text-arena-muted hover:bg-arena-surface-hover hover:text-arena-text"
     >
       {current === "en" ? "中文" : "English"}
     </button>

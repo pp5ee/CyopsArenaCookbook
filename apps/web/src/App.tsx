@@ -12,7 +12,7 @@ import { NotFound } from "./pages/NotFound";
 export function App(): JSX.Element {
   return (
     <BrowserRouter>
-      <div className="min-h-screen bg-slate-50 text-slate-900">
+      <div className="min-h-screen bg-arena-bg text-arena-text">
         <Header />
         <main className="mx-auto max-w-6xl px-4 py-6">
           <Routes>

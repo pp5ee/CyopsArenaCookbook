@@ -1,6 +1,6 @@
 # CyOpsArenaCookbook — Hackathon Companion
 
-> One workspace, four pages, one credit pool. The **CyOpsArenaCookbook** gives CyOpsxMinimax hackathon participants the rules, a Brainstorming-skill-driven prompt generator, and a live vote ticker — all backed by a single global AI-credit pool that every participant draws from.
+> One workspace, four pages, one credit pool. The **CyOpsArenaCookbook** gives CyOpsxMinimax hackathon participants the rules, a Brainstorming-skill-driven prompt generator, and a live vote ticker — all backed by a single global AI-credit pool that every participant draws from. **Dark cyberpunk theme** with deep navy/teal palette, neon cyan accents, and a full-viewport arena hero aesthetic.
 
 ## What problem does this solve?
 
@@ -194,7 +194,7 @@ Every brainstorm step (other than the first fixed Socratic seed) costs 20 credit
 
 ## Stack
 
-- **Frontend**: Vite 5 + React 18 + TypeScript + Tailwind + react-router + zustand + i18next.
+- **Frontend**: Vite 5 + React 18 + TypeScript + Tailwind + react-router + zustand + i18next. Custom `arena` color palette (bg: `#0A0E17`, accent: `#06B6D4`, surface: `#111827`) with neon glow utilities.
 - **Backend**: Node 20 + Express + TypeScript + `better-sqlite3` + zod + vitest.
 - **Monorepo**: pnpm workspaces. `pnpm dev` runs both apps in parallel; Vite proxies `/api/*` to Express on `:4000`.
 - **LLM**: OpenAI-compatible client at `https://token-ai.cysic.xyz/v1`.

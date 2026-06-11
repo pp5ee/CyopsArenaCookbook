@@ -9,17 +9,17 @@ export function About(): JSX.Element {
   const { t } = useTranslation();
   return (
     <section className="space-y-6">
-      <h1 className="text-2xl font-semibold text-slate-900">{t("about.title")}</h1>
+      <h1 className="text-2xl font-semibold text-arena-text">{t("about.title")}</h1>
 
-      <article className="prose prose-slate max-w-none">
-        <h2 className="text-lg font-semibold text-slate-900">{t("about.purposeTitle")}</h2>
-        <p className="leading-relaxed text-slate-700">{t("about.purpose")}</p>
+      <article className="max-w-none space-y-3">
+        <h2 className="text-lg font-semibold text-arena-text">{t("about.purposeTitle")}</h2>
+        <p className="leading-relaxed text-arena-muted">{t("about.purpose")}</p>
       </article>
 
       <article>
-        <h2 className="text-lg font-semibold text-slate-900">{t("about.rubricTitle")}</h2>
-        <p className="mt-1 text-sm text-slate-600">
-          <Link to="/" className="text-indigo-600 hover:underline">
+        <h2 className="text-lg font-semibold text-arena-text">{t("about.rubricTitle")}</h2>
+        <p className="mt-1 text-sm text-arena-muted">
+          <Link to="/" className="text-arena-accent hover:underline">
             {t("guide.scoring.rubric")} →
           </Link>
         </p>
@@ -30,20 +30,20 @@ export function About(): JSX.Element {
           {RUBRIC_DIMENSIONS.map((d) => (
             <li
               key={d.id}
-              className="flex items-center justify-between rounded border border-slate-200 bg-white px-3 py-2 text-sm"
+              className="flex items-center justify-between rounded border border-arena-border bg-arena-surface px-3 py-2 text-sm"
             >
-              <span className="text-slate-800">{t(d.titleKey)}</span>
-              <span className="font-mono text-slate-600">{d.weight}%</span>
+              <span className="text-arena-text">{t(d.titleKey)}</span>
+              <span className="font-mono text-arena-muted">{d.weight}%</span>
             </li>
           ))}
         </ul>
       </article>
 
-      <article className="prose prose-slate max-w-none">
-        <h2 className="text-lg font-semibold text-slate-900">{t("about.brainstormingTitle")}</h2>
-        <p className="leading-relaxed text-slate-700">{t("about.brainstorming")}</p>
-        <p className="mt-2 text-sm text-slate-600">
-          <Link to="/prompt" className="text-indigo-600 hover:underline">
+      <article className="max-w-none space-y-3">
+        <h2 className="text-lg font-semibold text-arena-text">{t("about.brainstormingTitle")}</h2>
+        <p className="leading-relaxed text-arena-muted">{t("about.brainstorming")}</p>
+        <p className="mt-2 text-sm text-arena-muted">
+          <Link to="/prompt" className="text-arena-accent hover:underline">
             {t("nav.prompt")} →
           </Link>
         </p>

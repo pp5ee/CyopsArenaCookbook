@@ -22,7 +22,7 @@ export function Sparkline({
         width={width}
         height={height}
         viewBox={`0 0 ${width} ${height}`}
-        className="text-slate-300"
+        className="text-arena-muted"
       >
         <line
           x1="0"
@@ -44,7 +44,7 @@ export function Sparkline({
         width={width}
         height={height}
         viewBox={`0 0 ${width} ${height}`}
-        className="text-indigo-500"
+        className="text-arena-accent"
       >
         <circle cx={width / 2} cy={y} r="3" fill="currentColor" />
       </svg>
@@ -75,7 +75,7 @@ export function Sparkline({
       width={width}
       height={height}
       viewBox={`0 0 ${width} ${height}`}
-      className="text-indigo-500"
+      className="text-arena-accent"
     >
       <polyline
         points={points}

@@ -116,7 +116,7 @@ export function VoteTicker(): JSX.Element {
       <ToastRail />
       <section className="space-y-6">
         <header>
-          <h1 className="text-2xl font-semibold text-slate-900">{t("vote.title")}</h1>
+          <h1 className="text-2xl font-semibold text-arena-text">{t("vote.title")}</h1>
         </header>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -135,8 +135,8 @@ export function VoteTicker(): JSX.Element {
           <Stat label={t("vote.observedAt")} value={summary?.observedAt ?? "—"} />
         </div>
 
-        <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+        <div className="rounded-lg border border-arena-border bg-arena-surface p-5 shadow-sm">
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-arena-muted">
             {t("vote.history")}
           </h2>
           <div className="mt-3">
@@ -147,7 +147,7 @@ export function VoteTicker(): JSX.Element {
         {err && (
           <div
             role="alert"
-            className="rounded-lg border border-rose-200 bg-rose-50 p-4 text-sm text-rose-800"
+            className="rounded-lg border border-arena-danger/30 bg-arena-danger-dim/30 p-4 text-sm text-arena-danger"
           >
             {err}
           </div>
@@ -169,12 +169,12 @@ function Stat({
   return (
     <div
       data-testid="vote-stat"
-      className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm"
+      className="rounded-lg border border-arena-border bg-arena-surface p-5 shadow-sm"
     >
-      <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">{label}</div>
+      <div className="text-xs font-semibold uppercase tracking-wide text-arena-muted">{label}</div>
       <div
         className={
-          "mt-2 text-2xl font-semibold text-slate-900 " + (mono ? "font-mono" : "")
+          "mt-2 text-2xl font-semibold text-arena-text " + (mono ? "font-mono" : "")
         }
       >
         {value}

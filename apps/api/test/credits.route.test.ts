@@ -1,8 +1,14 @@
 // End-to-end test for the AC-4 routes: GET /api/credits and
 // POST /api/chat. Boots createApp() (no DB poller, no network) and
 // exercises the real HTTP + service stack.
+//
+// AC-5 swap: the chat route now actually calls the LLM, so the
+// /api/chat tests mock the @cookbook/api LLM service module with
+// `vi.mock`. This keeps the test's own `fetch` calls (used to talk
+// to the test server) un-mocked. The credit-deduction invariants
+// (AC-4) are still verified end-to-end through the real route.
 
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -10,6 +16,32 @@ import { setDb, openDb, type DB } from "../src/db/connection.js";
 import { runMigrations } from "../src/db/migrate.js";
 import { seed } from "../src/db/seed.js";
 import { createApp } from "../src/server.js";
+
+// Mock the LLM service so the chat route doesn't make real network
+// calls. We provide a minimal chat() that resolves with a canned
+// response, and pickModel() that returns a fixed id. Everything
+// else delegates to the real module.
+vi.mock("../src/services/llm.js", async () => {
+  const real = await vi.importActual<
+    typeof import("../src/services/llm.js")
+  >("../src/services/llm.js");
+  return {
+    ...real,
+    chat: vi.fn(async () => ({
+      content: "ok",
+      model: "gpt-4o-mini",
+      tokensIn: 3,
+      tokensOut: 2,
+      latencyMs: 1,
+    })),
+    pickModel: vi.fn(async () => "gpt-4o-mini"),
+  };
+});
+
+// Importing the mocked module after `vi.mock` ensures the import
+// resolves to the mocked version. We also grab a reference to the
+// mock function so individual tests can assert on call counts.
+const { chat: llmChat } = await import("../src/services/llm.js");
 
 function resetBalance(db: DB, balance: number): void {
   db.exec("DELETE FROM credit_ledger");
@@ -31,6 +63,7 @@ describe("credits routes", () => {
     setDb(openDb(dbFile));
     runMigrations();
     seed();
+    vi.mocked(llmChat).mockClear();
 
     const app = createApp();
     server = app.listen(0);
@@ -56,25 +89,33 @@ describe("credits routes", () => {
     });
   });
 
-  it("POST /api/chat deducts 20 credits and returns 200", async () => {
+  it("POST /api/chat deducts 20 credits and returns 200 (LLM reply attached)", async () => {
     const res = await fetch(`http://127.0.0.1:${port}/api/chat`, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ messages: [{ role: "user", content: "hi" }] }),
     });
     expect(res.status).toBe(200);
-    const body = (await res.json()) as { ok: boolean; balance: number; reply: string };
+    const body = (await res.json()) as {
+      ok: boolean;
+      balance: number;
+      reply: string;
+      model: string;
+      tokensIn: number;
+      tokensOut: number;
+    };
     expect(body.ok).toBe(true);
     expect(body.balance).toBe(980);
-    expect(body.reply).toContain("AC-5");
+    expect(body.reply).toBe("ok");
+    expect(body.model).toBe("gpt-4o-mini");
   });
 
-  it("POST /api/chat with insufficient balance returns 402", async () => {
+  it("POST /api/chat with insufficient balance returns 402 (no LLM call)", async () => {
     resetBalance(openDb(dbFile), 10);
     const res = await fetch(`http://127.0.0.1:${port}/api/chat`, {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({}),
+      body: JSON.stringify({ messages: [{ role: "user", content: "x" }] }),
     });
     expect(res.status).toBe(402);
     const body = (await res.json()) as {
@@ -85,6 +126,7 @@ describe("credits routes", () => {
     expect(body.error).toBe("insufficient_credits");
     expect(body.balance).toBe(10);
     expect(body.required).toBe(20);
+    expect(llmChat).not.toHaveBeenCalled();
   });
 
   it("POST /api/chat with invalid body returns 400", async () => {
@@ -96,6 +138,15 @@ describe("credits routes", () => {
     expect(res.status).toBe(400);
   });
 
+  it("POST /api/chat with empty messages array returns 400 (zod)", async () => {
+    const res = await fetch(`http://127.0.0.1:${port}/api/chat`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ messages: [] }),
+    });
+    expect(res.status).toBe(400);
+  });
+
   it("5 parallel POSTs from 100 → balance=0, all 5 are 200, no 402s", async () => {
     resetBalance(openDb(dbFile), 100);
     const results = await Promise.all(
@@ -103,7 +154,7 @@ describe("credits routes", () => {
         fetch(`http://127.0.0.1:${port}/api/chat`, {
           method: "POST",
           headers: { "content-type": "application/json" },
-          body: JSON.stringify({}),
+          body: JSON.stringify({ messages: [{ role: "user", content: "x" }] }),
         }),
       ),
     );
@@ -123,7 +174,7 @@ describe("credits routes", () => {
         fetch(`http://127.0.0.1:${port}/api/chat`, {
           method: "POST",
           headers: { "content-type": "application/json" },
-          body: JSON.stringify({}),
+          body: JSON.stringify({ messages: [{ role: "user", content: "x" }] }),
         }),
       ),
     );

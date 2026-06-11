@@ -91,6 +91,13 @@ export interface GrantOutcome {
 /**
  * Append a positive-credit row to the ledger. Used by the vote poller
  * (+100 per new vote) and any future top-up flow.
+ *
+ * INVARIANT: `delta` is the historical change that CREATED this row
+ * (e.g. +1000 for the seed, +100 per vote, +20 for a refund). It is
+ * NOT the change vs the previous row — deductions use an in-place
+ * UPDATE on the latest row's `balance` and leave `delta` unchanged.
+ * So `balance` is the running total; `delta` describes how this row
+ * came to exist, not the diff to the row before it.
  */
 export function recordGrant(
   delta: number,

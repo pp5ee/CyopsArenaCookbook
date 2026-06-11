@@ -37,12 +37,3 @@ apps/api/src/services/llm.selectedModel.txt
 # Vitest tsc output (when `tsc` runs as part of the test pipeline).
 apps/api/test/*.js
 apps/api/test/*.js.map
-
-# Vitest tsc output (when `tsc` runs as part of the test pipeline).
-apps/api/test/*.js
-apps/api/test/*.js.map
-
-
-# AC-5: persistent LLM model-selection cache (rewritten at boot).
-apps/api/src/services/llm.selectedModel.txt
-

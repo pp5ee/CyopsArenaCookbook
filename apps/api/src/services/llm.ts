@@ -99,10 +99,6 @@ export interface ChatResponse {
 let cachedModel: string | null = null;
 let probeInFlight: Promise<string> | null = null;
 
-function headersWithoutKey(): Record<string, string> {
-  return { "Content-Type": "application/json" };
-}
-
 function authHeaders(): Record<string, string> {
   // We build the header here and ONLY here. safeLlmErrorResponse()
   // guarantees the key never leaves this file.
@@ -387,5 +383,3 @@ export function safeLlmErrorResponse(
 
 // Surface the cache-file path so tests can clean up after themselves.
 export const LLM_CACHE_PATH = CACHE_FILE;
-// Expose for the route to import the same file-root location it uses.
-export const LLM_HEADERS_SENTINEL = headersWithoutKey;

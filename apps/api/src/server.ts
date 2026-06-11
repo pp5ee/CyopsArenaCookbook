@@ -10,6 +10,7 @@ import { seed } from "./db/seed.js";
 import { votesRouter } from "./routes/votes.js";
 import { creditsRouter } from "./routes/credits.js";
 import { chatRouter } from "./routes/chat.js";
+import { promptRouter } from "./routes/prompt.js";
 import { startVotePoller, stopVotePoller } from "./jobs/votePoller.js";
 
 export function createApp(): Express {
@@ -29,6 +30,7 @@ export function createApp(): Express {
   app.use("/api/votes", votesRouter);
   app.use("/api/credits", creditsRouter);
   app.use("/api/chat", chatRouter);
+  app.use("/api/prompt", promptRouter);
 
   return app;
 }

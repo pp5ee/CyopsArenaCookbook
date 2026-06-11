@@ -2,6 +2,8 @@
 import express from "express";
 import cors from "cors";
 import { config } from "./config.js";
+import { runMigrations } from "./db/migrate.js";
+import { seed } from "./db/seed.js";
 
 export function createApp(): express.Express {
   const app = express();
@@ -20,8 +22,15 @@ export function createApp(): express.Express {
   return app;
 }
 
+export function bootDb(): void {
+  // Run migrations and seed on every boot; both are idempotent.
+  runMigrations();
+  seed();
+}
+
 // Boot only when run directly (tsx watch, node dist/server.js)
 if (import.meta.url === `file://${process.argv[1]}`) {
+  bootDb();
   const app = createApp();
   app.listen(config.PORT, () => {
     // eslint-disable-next-line no-console

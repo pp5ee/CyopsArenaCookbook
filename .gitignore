@@ -30,9 +30,3 @@ venv/
 dist-test/
 apps/api/data/
 apps/api/dist/
-
-# TypeScript build artifacts
-*.tsbuildinfo
-dist-test/
-apps/api/data/
-apps/api/dist/

@@ -41,6 +41,21 @@ The pool is a single ledger row mutated only through a guarded SQL `UPDATE … W
 
 All configuration lives in `.env` (gitignored). See `.env.example` for the full list. The most important variable is `OPENAI_API_KEY` — without it the LLM routes return `502`.
 
+> **Operator note:** this scaffold ships a placeholder `OPENAI_API_KEY` in `.env`. The real key must be supplied by the operator (manually edit `.env`, or wire it through your platform's secret manager). Never commit the real key — the `secret-guard.sh` pre-commit hook will reject it.
+
+## Database
+
+The API uses a local SQLite file. On every server boot (`pnpm --filter @cookbook/api dev` or `start`) the migration runner applies any pending SQL files in `apps/api/src/db/migrations/`, then the seed step inserts the starting `CREDIT_START` (default 1000) credit row if the ledger is empty. Both steps are idempotent.
+
+You can also run them by hand:
+
+```bash
+pnpm --filter @cookbook/api migrate
+pnpm --filter @cookbook/api seed
+```
+
+The DB file lives at `apps/api/data/cookbook.sqlite` (anchored to the API package root, not the cwd; override with an absolute `DATABASE_FILE` in `.env`). The directory is gitignored.
+
 ## Stack
 
 - **Frontend**: Vite 5 + React 18 + TypeScript + Tailwind + react-router + zustand + i18next.

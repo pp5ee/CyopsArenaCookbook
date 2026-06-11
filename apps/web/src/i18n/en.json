@@ -1,0 +1,113 @@
+{
+  "nav": {
+    "guide": "Guide",
+    "prompt": "Prompt Studio",
+    "vote": "Live Ticker",
+    "about": "About"
+  },
+  "common": {
+    "loading": "Loading…",
+    "error": "Something went wrong.",
+    "retry": "Retry",
+    "openInCyops": "Open in CyOps",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "back": "Back",
+    "next": "Next",
+    "start": "Start",
+    "submit": "Submit",
+    "close": "Close"
+  },
+  "credits": {
+    "label": "Credits",
+    "blocked": "AI requests are paused — the pool is below 20. Earn more by sharing the cookbook or wait for the next vote grant."
+  },
+  "guide": {
+    "title": "Hackathon Guide",
+    "tabs": {
+      "rules": "Rules",
+      "prizes": "Prizes",
+      "scoring": "Scoring"
+    },
+    "rules": {
+      "title": "Rules",
+      "body": "Welcome to the CyOpsxMinimax hackathon. The cookbook exists so you can spend your time shipping, not spelunking the rulebook. Pick a track below, brainstorm your prompt with the AI, then open it in CyOps to start building. Every vote on the live arena grants +100 credits to the global pool, and every AI request costs 20 credits — the pool is shared across all participants."
+    },
+    "prizes": {
+      "title": "Prizes",
+      "body": "Finalists are ranked by an AI score (60%) plus community votes on the CyOps Arena (40%). The AI judges score each project against the six rubric dimensions listed on the Scoring tab. Community votes are tracked live on the Live Ticker page. The combined score determines placement in the showcase."
+    },
+    "scoring": {
+      "title": "Scoring",
+      "intro": "The AI judges score each project against these six dimensions. Weights are baked into the brainstorming prompt generator so the prompt you ship is already aligned with what the judges will be looking for.",
+      "rubric": "AI score rubric",
+      "tracksTitle": "Recommended tracks"
+    }
+  },
+  "prompt": {
+    "title": "Prompt Studio",
+    "intro": "Two ways to start: pick a recommended track and the AI will guide you through the design, or describe your idea in free text. Either way, the AI walks you through a Socratic brainstorm and ends with a CyOps-ready prompt block.",
+    "trackPicker": "Pick a track",
+    "freeText": "Describe your idea",
+    "freeTextPlaceholder": "e.g. A browser extension that summarizes long PDFs into a 3-bullet TL;DR…",
+    "startWithTrack": "Start with this track",
+    "startFreeText": "Start with free text",
+    "languageLabel": "Language",
+    "languageEn": "English",
+    "languageZh": "中文",
+    "step": "Step {{step}} of 6",
+    "yourAnswer": "Your answer",
+    "answerPlaceholder": "Type your answer here…",
+    "result": "Your CyOps prompt",
+    "resultHint": "Copy this block and paste it into CyOps, or open it directly.",
+    "insufficient": "Not enough credits to continue. The pool is shared — try again after the next vote grant.",
+    "failGeneric": "The AI call failed. Your credits were refunded. Please try again.",
+    "backToStart": "Start a new brainstorm"
+  },
+  "vote": {
+    "title": "Live Ticker",
+    "current": "Current votes",
+    "lastDelta": "Last delta",
+    "observedAt": "Last observed",
+    "history": "History (sparkline)",
+    "toastDeltaPositive": "+{{delta}} new vote{{s}} — +{{credits}} credits added to the pool",
+    "toastDeltaZero": "No new votes this poll",
+    "toastDeltaNegative": "{{delta}} votes this poll (downvote correction)",
+    "toastCreditsBlocked": "Pool dropped below 20 — AI requests are paused",
+    "toastCreditsRecovered": "Pool recovered above 20 — AI requests resumed"
+  },
+  "about": {
+    "title": "About this cookbook",
+    "purposeTitle": "Purpose",
+    "purpose": "The CyOpsArenaCookbook is a thin companion for CyOpsxMinimax hackathon participants. It packages the rules, the prize structure, the scoring rubric, and a Brainstorming-skill-driven prompt generator so you can move from 'rough idea' to 'CyOps-ready prompt' in minutes — not hours.",
+    "rubricTitle": "Scoring rubric",
+    "brainstormingTitle": "How the Brainstorming Skill Works",
+    "brainstorming": "The prompt generator is driven by the upstream obra/superpowers brainstorming skill: a Socratic state machine that asks one question at a time, walks you through intent → context → constraints → approaches → design → refine, and emits a JSON object that the route wraps into a CyOps front-matter + Markdown block. Every AI step costs 20 credits; the global pool starts at 1000 and earns +100 per observed net-new vote on the live arena."
+  },
+  "tracks": {
+    "ship-a-feature": {
+      "title": "Ship-a-Feature",
+      "blurb": "Close a real GitHub issue with a working PR that maintainers would actually want to merge."
+    },
+    "mcp-server": {
+      "title": "MCP Server Sprint",
+      "blurb": "Build a useful MCP server for real developer workflows, tools, or reusable primitives."
+    },
+    "whole-repo-refactor": {
+      "title": "Whole-Repo Refactor",
+      "blurb": "Modernize, migrate, or clean up a real codebase with measurable before / after improvements."
+    },
+    "resurrection": {
+      "title": "The Resurrection",
+      "blurb": "Revive an abandoned, broken, or half-finished project and make it work again."
+    }
+  },
+  "rubric": {
+    "implementation": "Implementation & Engineering Quality",
+    "architecture": "Architecture & Complexity Fit",
+    "deliverable": "Deliverable Completeness",
+    "project_copy": "Project Copy & Documentation",
+    "ai_agent": "AI/Agent Integration",
+    "innovation": "Implementation Innovation"
+  }
+}

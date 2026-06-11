@@ -1,0 +1,60 @@
+- generic
+  - banner
+    - link "Cysic CYSIC ARENA" [ref=e7]
+      - image "Cysic"
+      - StaticText "CYSIC ARENA"
+    - navigation "Main" [ref=e8]
+      - link "GALLERY" [ref=e22]
+      - link "SUBMIT" [ref=e23]
+      - link "LEADERBOARD" [ref=e24]
+    - button "SIGN IN" [expanded=false, ref=e25]
+      - StaticText "SIGN IN"
+  - main
+    - generic
+      - generic
+        - image "CyOps x MiniMax M3 Hackathon"
+        - heading "CYOPS X MINIMAX M3 HACKATHON" [level=1, ref=e26]
+      - paragraph
+        - StaticText "Build bigger AI projects with CyOps Humanize and MiniMax M3"
+      - timer
+        - StaticText "HACKATHON ENDS IN"
+        - generic
+          - StaticText "07"
+          - StaticText "DAYS"
+        - generic
+          - StaticText "22"
+          - StaticText "HOURS"
+        - generic
+          - StaticText "57"
+          - StaticText "MINUTES"
+        - generic
+          - StaticText "41"
+          - StaticText "SECONDS"
+      - article
+        - heading "CYOPS HUMANIZE" [level=3, ref=e27]
+        - paragraph
+          - StaticText "Build HTML pages, PPT decks, mini games, research reports, and automation tools through structured workflows — from planning and building to review and iteration."
+      - article
+        - heading "MINIMAX M3" [level=3, ref=e28]
+        - paragraph
+          - StaticText "A capable and cost-efficient model for long-horizon AI workflows, helping builders generate, reason, and iterate with stable performance."
+      - heading "EXCLUSIVE HACKATHON BENEFITS" [level=2, ref=e9]
+      - generic
+        - StaticText "PRIZE POOL"
+        - StaticText "5,000 USDC"
+        - button "Details →" [ref=e29]
+      - generic
+        - StaticText "MINIMAX M3 TOKENS"
+        - StaticText "80"
+        - StaticText "% OFF"
+        - StaticText "Input"
+        - deletion
+          - StaticText "$0.60/M"
+        - StaticText "$0.12/M"
+        - StaticText "Output"
+        - deletion
+          - StaticText "$2.40/M"
+        - StaticText "$0.48/M"
+        - StaticText "Cached"
+        - deletion
+          - StaticText "$0.12/M"

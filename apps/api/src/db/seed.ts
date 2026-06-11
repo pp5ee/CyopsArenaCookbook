@@ -9,11 +9,15 @@ import { runMigrations } from "./migrate.js";
 export function seed(db = getDb()): { inserted: boolean; balance: number } {
   runMigrations(db);
 
-  const row = db
-    .prepare(`SELECT balance FROM credit_ledger ORDER BY id DESC LIMIT 1`)
-    .get() as { balance: number } | undefined;
-  if (row) {
-    return { inserted: false, balance: row.balance };
+  // "Empty" check: cheap LIMIT 1 lookup, no sort.
+  const present = db
+    .prepare(`SELECT 1 AS one FROM credit_ledger LIMIT 1`)
+    .get() as { one: number } | undefined;
+  if (present) {
+    const last = db
+      .prepare(`SELECT balance FROM credit_ledger ORDER BY id DESC LIMIT 1`)
+      .get() as { balance: number };
+    return { inserted: false, balance: last.balance };
   }
 
   db.prepare(

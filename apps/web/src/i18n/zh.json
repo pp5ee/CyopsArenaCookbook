@@ -21,7 +21,15 @@
   },
   "credits": {
     "label": "积分",
+    "poolLabel": "共享积分池",
+    "poolBlocked": "积分池已暂停",
     "blocked": "AI 请求已暂停——积分池低于 20。可以通过分享或在下一轮投票积分注入后再试。"
+  },
+  "landing": {
+    "tagline": "把你的想法变成 CyOps 可用的提示词。",
+    "cta": "给我生成一个想法",
+    "votesLabel": "Arena 投票",
+    "poolHint": "剩余积分——由所有参赛者共享"
   },
   "guide": {
     "title": "黑客松指南",

@@ -1,12 +1,11 @@
 // Top-level router. Renders the Header on every page and switches
-// between the four routes defined by AC-7. The /vote route pulls in
-// the ToastRail via the page itself.
+// between the routes. Old pages (Guide, VoteTicker, About) remain
+// in the source tree for future use but the landing page is now the
+// primary root route.
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Header } from "./components/Header";
-import { Guide } from "./pages/Guide";
+import { Landing } from "./pages/Landing";
 import { PromptStudio } from "./pages/PromptStudio";
-import { VoteTicker } from "./pages/VoteTicker";
-import { About } from "./pages/About";
 import { NotFound } from "./pages/NotFound";
 
 export function App(): JSX.Element {
@@ -16,10 +15,8 @@ export function App(): JSX.Element {
         <Header />
         <main className="mx-auto max-w-6xl px-4 py-6">
           <Routes>
-            <Route path="/" element={<Guide />} />
+            <Route path="/" element={<Landing />} />
             <Route path="/prompt" element={<PromptStudio />} />
-            <Route path="/vote" element={<VoteTicker />} />
-            <Route path="/about" element={<About />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>

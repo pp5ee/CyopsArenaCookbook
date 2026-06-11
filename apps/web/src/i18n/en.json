@@ -21,7 +21,15 @@
   },
   "credits": {
     "label": "Credits",
+    "poolLabel": "Shared pool",
+    "poolBlocked": "Pool paused",
     "blocked": "AI requests are paused — the pool is below 20. Earn more by sharing the cookbook or wait for the next vote grant."
+  },
+  "landing": {
+    "tagline": "Turn your idea into a CyOps-ready prompt.",
+    "cta": "Generate me an idea",
+    "votesLabel": "Arena votes",
+    "poolHint": "credits remaining — shared by all participants"
   },
   "guide": {
     "title": "Hackathon Guide",

@@ -81,7 +81,7 @@ export function Guide(): JSX.Element {
                 <tbody>
                   {RUBRIC_DIMENSIONS.map((d) => (
                     <tr key={d.id} className="border-t border-slate-100">
-                      <td className="px-4 py-2 text-slate-800">{t(`rubric.${d.id.split("_").slice(0, 1)[0] === "project" ? "project_copy" : d.id.split("_").slice(0, 1)[0] === "ai" ? "ai_agent" : d.id.split("_")[0]}`)}</td>
+                      <td className="px-4 py-2 text-slate-800">{t(d.titleKey)}</td>
                       <td className="px-4 py-2 text-right font-mono text-slate-700">{d.weight}%</td>
                     </tr>
                   ))}

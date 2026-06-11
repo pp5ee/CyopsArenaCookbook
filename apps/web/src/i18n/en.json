@@ -16,7 +16,8 @@
     "next": "Next",
     "start": "Start",
     "submit": "Submit",
-    "close": "Close"
+    "close": "Close",
+    "toggleLanguage": "Switch language"
   },
   "credits": {
     "label": "Credits",

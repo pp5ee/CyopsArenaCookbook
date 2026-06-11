@@ -119,6 +119,13 @@ describe("brainstorming service (AC-6)", () => {
       // CJK characters expected.
       expect(out.question).toMatch(/[一-龥]/);
     });
+
+    it("honors locale='en' explicitly (no fallback to zh)", async () => {
+      const out = await bsStart({ track: null, locale: "en" });
+      // The English first question starts with "What" — never a CJK char.
+      expect(out.question).toMatch(/^What/);
+      expect(out.question).not.toMatch(/[一-龥]/);
+    });
   });
 
   describe("answer (happy path: INTENT → ... → DONE)", () => {
@@ -218,6 +225,78 @@ describe("brainstorming service (AC-6)", () => {
       const wrapped = '```json\n{"question":"hi"}\n```';
       const out = __test.extractJson(wrapped, schema);
       expect(out.question).toBe("hi");
+    });
+  });
+
+  describe("answer (locale propagation to the LLM)", () => {
+    it("includes the chosen locale in the system prompt so the LLM responds in that locale", async () => {
+      let capturedSystem = "";
+      let callCount = 0;
+      vi.mocked(llmChat).mockImplementation(async (messages) => {
+        callCount += 1;
+        // The first message is the system prompt. Capture it.
+        const sys = (messages as { role: string; content: string }[]).find(
+          (m) => m.role === "system",
+        );
+        if (sys) capturedSystem = sys.content;
+        return okQuestion("Q?");
+      });
+      const s0 = await bsStart({ track: null, locale: "zh" });
+      await bsAnswer({ sessionId: s0.sessionId, answer: "hello" });
+      expect(callCount).toBeGreaterThan(0);
+      // The system prompt must include the locale directive.
+      expect(capturedSystem).toMatch(/locale is "zh"/);
+      expect(capturedSystem).toMatch(/Respond in that locale/);
+    });
+
+    it("includes the en locale in the system prompt when locale='en'", async () => {
+      let capturedSystem = "";
+      vi.mocked(llmChat).mockImplementation(async (messages) => {
+        const sys = (messages as { role: string; content: string }[]).find(
+          (m) => m.role === "system",
+        );
+        if (sys) capturedSystem = sys.content;
+        return okQuestion("Q?");
+      });
+      const s0 = await bsStart({ track: null, locale: "en" });
+      await bsAnswer({ sessionId: s0.sessionId, answer: "hello" });
+      expect(capturedSystem).toMatch(/locale is "en"/);
+    });
+  });
+
+  describe("answer (locale propagation to the LLM)", () => {
+    it("includes the chosen locale in the system prompt so the LLM responds in that locale", async () => {
+      let capturedSystem = "";
+      let callCount = 0;
+      vi.mocked(llmChat).mockImplementation(async (messages) => {
+        callCount += 1;
+        // The first message is the system prompt. Capture it.
+        const sys = (messages as { role: string; content: string }[]).find(
+          (m) => m.role === "system",
+        );
+        if (sys) capturedSystem = sys.content;
+        return okQuestion("Q?");
+      });
+      const s0 = await bsStart({ track: null, locale: "zh" });
+      await bsAnswer({ sessionId: s0.sessionId, answer: "hello" });
+      expect(callCount).toBeGreaterThan(0);
+      // The system prompt must include the locale directive.
+      expect(capturedSystem).toMatch(/locale is "zh"/);
+      expect(capturedSystem).toMatch(/Respond in that locale/);
+    });
+
+    it("includes the en locale in the system prompt when locale='en'", async () => {
+      let capturedSystem = "";
+      vi.mocked(llmChat).mockImplementation(async (messages) => {
+        const sys = (messages as { role: string; content: string }[]).find(
+          (m) => m.role === "system",
+        );
+        if (sys) capturedSystem = sys.content;
+        return okQuestion("Q?");
+      });
+      const s0 = await bsStart({ track: null, locale: "en" });
+      await bsAnswer({ sessionId: s0.sessionId, answer: "hello" });
+      expect(capturedSystem).toMatch(/locale is "en"/);
     });
   });
 

@@ -1,7 +1,8 @@
 // Language toggle. Flips the i18next language, persists to
 // localStorage.cookbook.lang, and reflects the new value on
-// <html lang>. AC-8 expands the key set; this component only needs
-// to know how to switch between en and zh.
+// <html lang>. The aria-label is a dedicated key
+// (common.toggleLanguage) so screen readers announce "Switch
+// language" / "切换语言" instead of the button's visible text.
 import { useTranslation } from "react-i18next";
 import { SUPPORTED_LOCALES, persistLocale, type Locale } from "../i18n";
 
@@ -13,7 +14,7 @@ export function LangToggle(): JSX.Element {
     <button
       type="button"
       data-testid="lang-toggle"
-      aria-label={t("common.retry")}
+      aria-label={t("common.toggleLanguage")}
       onClick={() => {
         void i18n.changeLanguage(next);
         persistLocale(next);

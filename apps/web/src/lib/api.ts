@@ -99,8 +99,8 @@ export const RUBRIC_DIMENSIONS: {
   { id: "implementation_engineering_quality", titleKey: "rubric.implementation", weight: 20 },
   { id: "architecture_complexity_fit", titleKey: "rubric.architecture", weight: 16 },
   { id: "deliverable_completeness", titleKey: "rubric.deliverable", weight: 20 },
-  { id: "project_copy_documentation", titleKey: "rubric.copy", weight: 16 },
-  { id: "ai_agent_integration", titleKey: "rubric.ai", weight: 20 },
+  { id: "project_copy_documentation", titleKey: "rubric.project_copy", weight: 16 },
+  { id: "ai_agent_integration", titleKey: "rubric.ai_agent", weight: 20 },
   { id: "implementation_innovation", titleKey: "rubric.innovation", weight: 8 },
 ];
 

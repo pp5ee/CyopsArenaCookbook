@@ -32,15 +32,7 @@ export function About(): JSX.Element {
               key={d.id}
               className="flex items-center justify-between rounded border border-slate-200 bg-white px-3 py-2 text-sm"
             >
-              <span className="text-slate-800">
-                {t(
-                  d.id === "project_copy_documentation"
-                    ? "rubric.project_copy"
-                    : d.id === "ai_agent_integration"
-                      ? "rubric.ai_agent"
-                      : `rubric.${d.id.split("_")[0]}`,
-                )}
-              </span>
+              <span className="text-slate-800">{t(d.titleKey)}</span>
               <span className="font-mono text-slate-600">{d.weight}%</span>
             </li>
           ))}

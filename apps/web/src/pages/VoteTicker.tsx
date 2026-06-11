@@ -3,7 +3,7 @@
 // for vote deltas + credits threshold crossings. The right-side
 // toast rail (components/ToastRail.tsx) animates new events in
 // and auto-dismisses after 6 s.
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { api, ApiError, type VoteSummary } from "../lib/api";
 import { Sparkline } from "../components/Sparkline";
@@ -44,6 +44,15 @@ export function VoteTicker(): JSX.Element {
   const [err, setErr] = useState<string | null>(null);
   const push = useToastStore((s) => s.push);
 
+  // Mirror `summary` into a ref so the SSE consumer can diff each
+  // event against the LATEST snapshot — the 5 s poll above and the
+  // SSE onMessage can interleave, and capturing `summary` in the
+  // onMessage closure (a useEffect dep) would let it go stale.
+  const summaryRef = useRef<VoteSummary | null>(null);
+  useEffect(() => {
+    summaryRef.current = summary;
+  }, [summary]);
+
   // Initial load + 5 s polling fallback (the SSE stream is the
   // primary source of truth; the poll covers dropped events).
   useEffect(() => {
@@ -51,7 +60,10 @@ export function VoteTicker(): JSX.Element {
     async function tick() {
       try {
         const s = await api.votes();
-        if (!cancelled) setSummary(s);
+        if (!cancelled) {
+          setSummary(s);
+          summaryRef.current = s;
+        }
         if (!cancelled) setErr(null);
       } catch (e) {
         if (!cancelled) setErr(e instanceof ApiError ? e.message : String(e));
@@ -65,19 +77,19 @@ export function VoteTicker(): JSX.Element {
     };
   }, []);
 
-  // SSE consumer. We track the previous summary locally so we can
-  // diff each `vote` event and push a toast.
+  // SSE consumer. Reads the latest summary from the ref and
+  // updates it on every event so the sparkline and Stat tiles
+  // stay in sync.
   useEffect(() => {
     const es = new EventSource("/api/votes/stream");
-    let prev = summary;
     const onMessage = (e: MessageEvent) => {
       try {
         const ev = JSON.parse(e.data) as SseEvent;
         if (ev.type === "vote") {
-          const out = classifyVoteEvent(prev, ev);
+          const out = classifyVoteEvent(summaryRef.current, ev);
           if (out) {
             setSummary(out.next);
-            prev = out.next;
+            summaryRef.current = out.next;
             push({ kind: out.kind, delta: out.delta, credits: out.credits });
           }
         } else if (ev.type === "credits") {

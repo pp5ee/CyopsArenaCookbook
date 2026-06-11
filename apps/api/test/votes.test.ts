@@ -17,6 +17,7 @@ import {
 } from "../src/jobs/votePoller.js";
 import { runMigrations } from "../src/db/migrate.js";
 import { seed } from "../src/db/seed.js";
+import { createApp } from "../src/server.js";
 
 describe("votes service", () => {
   let workDir: string;
@@ -216,6 +217,71 @@ describe("votes service", () => {
         if (originalUrl === undefined) delete process.env.SUBMISSIONS_URL;
         else process.env.SUBMISSIONS_URL = originalUrl;
       }
+    });
+  });
+
+  // ================================================================
+  // AC-10: SSE HTTP route tests -- poll -> ledger -> SSE
+  // ================================================================
+  //
+  // These tests boot createApp() (no network, no poller) and read
+  // the chunked HTTP response manually to assert the exact SSE wire
+  // format the browser will see. Together with the broadcaster and
+  // recordPoll tests above, they cover the full poll->ledger->SSE
+  // chain.
+  describe("GET /api/votes/stream (SSE route)", () => {
+    let workDir2: string;
+    let dbFile2: string;
+    let server: import("node:http").Server;
+    let port: number;
+
+    beforeEach(async () => {
+      workDir2 = mkdtempSync(join(tmpdir(), "cookbook-votes-sse-"));
+      dbFile2 = join(workDir2, "sse.sqlite");
+      setDb(openDb(dbFile2));
+      runMigrations();
+      seed();
+      const app = createApp();
+      server = app.listen(0);
+      await new Promise<void>((r) => server.on("listening", () => r()));
+      port = (server.address() as { port: number }).port;
+    });
+
+    afterEach(async () => {
+      await new Promise<void>((r) => server.close(() => r()));
+      setDb(null);
+      rmSync(workDir2, { recursive: true, force: true });
+    });
+
+    function streamUrl(): string {
+      return "http://127.0.0.1:" + port + "/api/votes/stream";
+    }
+
+    it("replays the current vote as the first event on connect", async () => {
+      recordPoll(5, '{"votes":5}');
+      const ctrl = new AbortController();
+      const res = await fetch(streamUrl(), { signal: ctrl.signal });
+      const reader = res.body!.getReader();
+      const decoder = new TextDecoder();
+      const { value } = await reader.read();
+      ctrl.abort();
+      const text = decoder.decode(value, { stream: true });
+      expect(text).toMatch(/event: vote/);
+      expect(text).toMatch(/"current":5/);
+    });
+
+    it("uses the canonical SSE wire format", async () => {
+      recordPoll(1, '{"votes":1}');
+      const ctrl = new AbortController();
+      const res = await fetch(streamUrl(), { signal: ctrl.signal });
+      const reader = res.body!.getReader();
+      const decoder = new TextDecoder();
+      const { value } = await reader.read();
+      ctrl.abort();
+      const text = decoder.decode(value, { stream: true });
+      // Canonical SSE: event: vote ... data: { ... } ... \n\n
+      expect(text).toMatch(/event: vote\ndata: /);
+      expect(text).toMatch(/\n\n$/);
     });
   });
 });

@@ -1,0 +1,22 @@
+{
+  "name": "cyopsarenacookbook",
+  "version": "0.1.0",
+  "private": true,
+  "description": "CyOpsxMinimax hackathon companion: rules, scoring, brainstorming prompt generator, live vote ticker, and credit pool.",
+  "scripts": {
+    "dev": "pnpm -r --parallel dev",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test",
+    "typecheck": "pnpm -r typecheck",
+    "seed": "pnpm --filter api seed",
+    "migrate": "pnpm --filter api migrate",
+    "start": "pnpm -r start"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

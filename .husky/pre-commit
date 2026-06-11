@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+# .husky/pre-commit — invoke the secret guard before any commit lands.
+set -e
+bash "$(dirname "$0")/../apps/api/scripts/secret-guard.sh"

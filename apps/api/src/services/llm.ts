@@ -381,5 +381,166 @@ export function safeLlmErrorResponse(
   };
 }
 
+/* ------------------------------------------------------------------ */
+/*  chatStream() — streaming version                                  */
+/* ------------------------------------------------------------------ */
+
+export interface StreamToken {
+  token: string;
+}
+
+export interface StreamDone {
+  done: true;
+  content: string;
+  model: string;
+  tokensIn: number;
+  tokensOut: number;
+  latencyMs: number;
+}
+
+export type StreamEvent = StreamToken | StreamDone;
+
+/**
+ * Streaming chat completion. Returns an async generator that yields
+ * tokens one at a time as `{ token: "..." }`, then a final
+ * `{ done: true, content, model, tokensIn, tokensOut, latencyMs }`.
+ *
+ * The caller MUST iterate the generator to completion or call
+ * `.return()` on it — otherwise the underlying fetch body will leak.
+ * The credits service deduction/refund happens in the route, NOT here.
+ */
+export async function* chatStream(
+  messages: ChatMessage[],
+  opts: ChatOptions,
+): AsyncGenerator<StreamEvent, void, undefined> {
+  if (!Array.isArray(messages) || messages.length === 0) {
+    throw new LlmError("chatStream() requires at least one message", 400);
+  }
+  if (!opts.sessionId || opts.sessionId.length === 0) {
+    throw new LlmError("chatStream() requires opts.sessionId", 400);
+  }
+
+  const model = opts.model ?? (await pickModel());
+  const trimmed = truncateMessages(messages.map((m) => ({ ...m })));
+  const maxTokens = Math.min(
+    opts.maxTokens ?? MAX_OUTPUT_TOKENS,
+    MAX_OUTPUT_TOKENS,
+  );
+  const temperature = opts.temperature ?? 0.7;
+
+  const start = Date.now();
+  const ctl = new AbortController();
+  const timer = setTimeout(() => ctl.abort(), REQUEST_TIMEOUT_MS);
+
+  let fullContent = "";
+  let returnedModel = model;
+
+  try {
+    const res = await fetch(`${config.OPENAI_BASE_URL}/chat/completions`, {
+      method: "POST",
+      headers: authHeaders(),
+      body: JSON.stringify({
+        model,
+        messages: trimmed,
+        max_tokens: maxTokens,
+        temperature,
+        stream: true,
+        stream_options: { include_usage: true },
+        ...(opts.stop ? { stop: opts.stop } : {}),
+      }),
+      signal: ctl.signal,
+    });
+
+    if (!res.ok) {
+      throw new LlmError(
+        `LLM stream call failed: HTTP ${res.status}`,
+        res.status >= 400 && res.status < 600 ? res.status : 502,
+      );
+    }
+
+    if (!res.body) {
+      throw new LlmError("LLM stream returned no body", 502);
+    }
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = "";
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split("\n");
+      buffer = lines.pop() ?? "";
+
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (!trimmed || !trimmed.startsWith("data: ")) continue;
+        const data = trimmed.slice(6);
+        if (data === "[DONE]") continue;
+
+        try {
+          const parsed = JSON.parse(data) as {
+            model?: string;
+            choices?: { delta?: { content?: string } }[];
+            usage?: { prompt_tokens?: number; completion_tokens?: number };
+          };
+
+          if (parsed.model) returnedModel = parsed.model;
+
+          const delta = parsed.choices?.[0]?.delta?.content;
+          if (delta) {
+            fullContent += delta;
+            yield { token: delta };
+          }
+        } catch {
+          // Skip unparseable SSE lines
+        }
+      }
+    }
+  } catch (err) {
+    if (err instanceof LlmError) throw err;
+    if ((err as { name?: string }).name === "AbortError") {
+      throw new LlmError("LLM stream timed out after 30s", 504);
+    }
+    throw new LlmError(
+      `LLM stream failed: ${(err as Error).message}`,
+      502,
+    );
+  } finally {
+    clearTimeout(timer);
+  }
+
+  const latencyMs = Date.now() - start;
+  // Heuristic token counts — streaming APIs don't always return usage
+  const tokensIn = Math.ceil(
+    trimmed.reduce((n, m) => n + m.content.length, 0) / CHARS_PER_TOKEN,
+  );
+  const tokensOut = Math.ceil(fullContent.length / CHARS_PER_TOKEN);
+
+  // Persist audit row
+  try {
+    getDb()
+      .prepare(
+        `INSERT INTO chat_log
+           (session_id, role, content, tokens_in, tokens_out, latency_ms)
+         VALUES (?, 'assistant', ?, ?, ?, ?)`,
+      )
+      .run(opts.sessionId, fullContent, tokensIn, tokensOut, latencyMs);
+  } catch {
+    // Best-effort audit
+  }
+
+  yield {
+    done: true as const,
+    content: fullContent,
+    model: returnedModel,
+    tokensIn,
+    tokensOut,
+    latencyMs,
+  };
+}
+
 // Surface the cache-file path so tests can clean up after themselves.
 export const LLM_CACHE_PATH = CACHE_FILE;

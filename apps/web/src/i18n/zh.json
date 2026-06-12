@@ -1,10 +1,4 @@
 {
-  "nav": {
-    "guide": "指南",
-    "prompt": "提示词工作室",
-    "vote": "实时投票",
-    "about": "关于"
-  },
   "common": {
     "loading": "加载中…",
     "error": "出错了。",
@@ -27,71 +21,51 @@
   },
   "landing": {
     "tagline": "把你的想法变成 CyOps 可用的提示词。",
-    "cta": "给我生成一个想法",
+    "cta": "⚡ 给我生成一个想法",
     "votesLabel": "Arena 投票",
     "poolHint": "剩余积分——由所有参赛者共享"
   },
   "guide": {
     "title": "黑客松指南",
-    "tabs": {
-      "rules": "规则",
-      "prizes": "奖项",
-      "scoring": "评分"
-    },
     "rules": {
-      "title": "规则",
-      "body": "欢迎来到 CyOpsxMinimax 黑客松。Cookbook 的目标是让你把时间花在创造上，而不是翻规则手册。从下面挑选一个赛道，让 AI 引导你完成提示词设计，然后在 CyOps 中打开开始构建。每次在 Arena 上的投票都会为公共积分池注入 +100 积分，每次 AI 请求消耗 20 积分——积分池由所有参赛者共享。"
+      "title": "规则"
     },
     "prizes": {
-      "title": "奖项",
-      "body": "决赛排名由 AI 评分（60%）与 CyOps Arena 社区投票（40%）综合得出。AI 评委按照评分页列出的六个维度进行打分，社区投票则在 Live Ticker 页面实时跟踪。综合得分决定最终名次。"
+      "title": "奖项"
     },
     "scoring": {
       "title": "评分",
-      "intro": "AI 评委按这六个维度进行打分。权重已写入提示词生成器，因此你提交的提示词已天然对齐评委的关注点。",
+      "intro": "AI 评委按 6 个维度打分，结合社区投票决定最终排名。",
       "rubric": "AI 评分细则",
       "tracksTitle": "推荐赛道"
     }
   },
-  "prompt": {
-    "title": "提示词工作室",
-    "intro": "两种起步方式：选择推荐赛道，AI 将引导你完成设计；或者用自由文本描述你的想法。无论哪种方式，AI 都会以苏格拉底式提问带你完成头脑风暴，最终生成 CyOps 可用的提示词块。",
-    "trackPicker": "选择赛道",
-    "freeText": "描述你的想法",
-    "freeTextPlaceholder": "例如：一个浏览器扩展，把长 PDF 总结成 3 条要点…",
-    "startWithTrack": "以此赛道开始",
-    "startFreeText": "以自由文本开始",
-    "languageLabel": "语言",
-    "languageEn": "English",
-    "languageZh": "中文",
-    "step": "第 {{step}} 步，共 6 步",
-    "yourAnswer": "你的回答",
-    "answerPlaceholder": "在这里输入你的回答…",
-    "result": "你的 CyOps 提示词",
-    "resultHint": "复制这段内容并粘贴到 CyOps，或直接打开。",
-    "insufficient": "积分不足。积分池是共享的——下一轮投票积分注入后再试。",
-    "failGeneric": "AI 调用失败。你的积分已退还。请重试。",
-    "backToStart": "开始新的头脑风暴"
+  "ideas": {
+    "title": "生成你的想法",
+    "subtitle": "快速 AI 生成或引导式头脑风暴——选择你的方式。",
+    "quickGen": "快速生成",
+    "quickGenDesc": "AI 分析趋势和黑客松要求，一次性创建完整的项目想法。",
+    "chatQuiz": "聊天问答",
+    "chatQuizDesc": "AI 引导式头脑风暴——回答问题，逐步完善你的项目设计。",
+    "yourIdea": "你的想法（选填）",
+    "recommendedTracks": "推荐赛道",
+    "generating": "正在生成你的想法...",
+    "uiDesignPrompt": "UI 设计提示词",
+    "backendDesignPrompt": "后端设计提示词",
+    "sources": "来源与参考",
+    "step": "第 {{step}}/6 步",
+    "answerPlaceholder": "输入你的回答...（回车发送）",
+    "result": "你的 CyOps 提示词"
   },
-  "vote": {
-    "title": "实时投票",
-    "current": "当前票数",
-    "lastDelta": "最近变化",
-    "observedAt": "最近观察时间",
-    "history": "历史（折线）",
-    "toastDeltaPositive": "新增 +{{delta}} 票——积分池注入 +{{credits}} 积分",
-    "toastDeltaZero": "本轮投票无变化",
-    "toastDeltaNegative": "本轮投票 {{delta}}（可能是修正）",
-    "toastCreditsBlocked": "积分池跌破 20——AI 请求已暂停",
-    "toastCreditsRecovered": "积分池回升至 20 以上——AI 请求已恢复"
-  },
-  "about": {
-    "title": "关于本 Cookbook",
-    "purposeTitle": "目的",
-    "purpose": "CyOpsArenaCookbook 是 CyOpsxMinimax 黑客松参赛者的轻量伙伴。它把规则、奖项、评分细则，以及一个由 Brainstorming 技能驱动的提示词生成器打包在一起，让你用几分钟（而不是几小时）就能从“粗略想法”走到“CyOps 可用的提示词”。",
-    "rubricTitle": "评分细则",
-    "brainstormingTitle": "Brainstorming 技能的工作原理",
-    "brainstorming": "提示词生成器由上游 obra/superpowers 的 Brainstorming 技能驱动：它是一个苏格拉底式的状态机，每次只问一个问题，按 意图 → 上下文 → 约束 → 方案 → 设计 → 收尾 的顺序推进，最终产出一个 JSON 对象，再由路由包装成 CyOps 的 front-matter + Markdown 块。每一步 AI 调用消耗 20 积分；公共积分池初始为 1000，每次 Arena 上观察到净新增投票注入 +100。"
+  "voteForMe": {
+    "title": "给我们投票",
+    "subtitle": "每次投票为共享 AI 积分池注入 +100 积分。帮助大家生成更好的想法！",
+    "totalVotes": "总票数",
+    "creditsRemaining": "剩余积分",
+    "voteGrowth": "投票增长",
+    "liveActivity": "实时投票动态",
+    "voteCta": "在 CyOps Arena 给我们投票",
+    "perVote": "每次投票 +100 · 每次 AI 调用 20"
   },
   "tracks": {
     "ship-a-feature": {

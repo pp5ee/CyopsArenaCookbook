@@ -11,6 +11,7 @@ import { votesRouter } from "./routes/votes.js";
 import { creditsRouter } from "./routes/credits.js";
 import { chatRouter } from "./routes/chat.js";
 import { promptRouter } from "./routes/prompt.js";
+import { ideasRouter } from "./routes/ideas.js";
 import { startVotePoller, stopVotePoller } from "./jobs/votePoller.js";
 
 export function createApp(): Express {
@@ -31,6 +32,7 @@ export function createApp(): Express {
   app.use("/api/credits", creditsRouter);
   app.use("/api/chat", chatRouter);
   app.use("/api/prompt", promptRouter);
+  app.use("/api/ideas", ideasRouter);
 
   return app;
 }

@@ -10,7 +10,7 @@ export function NotFound(): JSX.Element {
       <p className="text-arena-muted">{t("common.error")}</p>
       <p>
         <Link to="/" className="text-arena-accent hover:underline">
-          {t("nav.guide")} →
+          Home →
         </Link>
       </p>
     </section>

@@ -1,10 +1,4 @@
 {
-  "nav": {
-    "guide": "Guide",
-    "prompt": "Prompt Studio",
-    "vote": "Live Ticker",
-    "about": "About"
-  },
   "common": {
     "loading": "Loading…",
     "error": "Something went wrong.",
@@ -21,77 +15,57 @@
   },
   "credits": {
     "label": "Credits",
-    "poolLabel": "Shared pool",
-    "poolBlocked": "Pool paused",
-    "blocked": "AI requests are paused — the pool is below 20. Earn more by sharing the cookbook or wait for the next vote grant."
+    "poolLabel": "Shared Pool",
+    "poolBlocked": "Pool Paused",
+    "blocked": "AI requests are paused — the pool is below 20. Earn more by sharing or wait for the next vote grant."
   },
   "landing": {
     "tagline": "Turn your idea into a CyOps-ready prompt.",
-    "cta": "Generate me an idea",
-    "votesLabel": "Arena votes",
+    "cta": "⚡ Generate Me an Idea",
+    "votesLabel": "Arena Votes",
     "poolHint": "credits remaining — shared by all participants"
   },
   "guide": {
     "title": "Hackathon Guide",
-    "tabs": {
-      "rules": "Rules",
-      "prizes": "Prizes",
-      "scoring": "Scoring"
-    },
     "rules": {
-      "title": "Rules",
-      "body": "Welcome to the CyOpsxMinimax hackathon. The cookbook exists so you can spend your time shipping, not spelunking the rulebook. Pick a track below, brainstorm your prompt with the AI, then open it in CyOps to start building. Every vote on the live arena grants +100 credits to the global pool, and every AI request costs 20 credits — the pool is shared across all participants."
+      "title": "Rules"
     },
     "prizes": {
-      "title": "Prizes",
-      "body": "Finalists are ranked by an AI score (60%) plus community votes on the CyOps Arena (40%). The AI judges score each project against the six rubric dimensions listed on the Scoring tab. Community votes are tracked live on the Live Ticker page. The combined score determines placement in the showcase."
+      "title": "Prizes"
     },
     "scoring": {
       "title": "Scoring",
-      "intro": "The AI judges score each project against these six dimensions. Weights are baked into the brainstorming prompt generator so the prompt you ship is already aligned with what the judges will be looking for.",
-      "rubric": "AI score rubric",
-      "tracksTitle": "Recommended tracks"
+      "intro": "AI judges score projects against these 6 dimensions. Combined with community votes for final ranking.",
+      "rubric": "AI Score Rubric",
+      "tracksTitle": "Recommended Tracks"
     }
   },
-  "prompt": {
-    "title": "Prompt Studio",
-    "intro": "Two ways to start: pick a recommended track and the AI will guide you through the design, or describe your idea in free text. Either way, the AI walks you through a Socratic brainstorm and ends with a CyOps-ready prompt block.",
-    "trackPicker": "Pick a track",
-    "freeText": "Describe your idea",
-    "freeTextPlaceholder": "e.g. A browser extension that summarizes long PDFs into a 3-bullet TL;DR…",
-    "startWithTrack": "Start with this track",
-    "startFreeText": "Start with free text",
-    "languageLabel": "Language",
-    "languageEn": "English",
-    "languageZh": "中文",
-    "step": "Step {{step}} of 6",
-    "yourAnswer": "Your answer",
-    "answerPlaceholder": "Type your answer here…",
-    "result": "Your CyOps prompt",
-    "resultHint": "Copy this block and paste it into CyOps, or open it directly.",
-    "insufficient": "Not enough credits to continue. The pool is shared — try again after the next vote grant.",
-    "failGeneric": "The AI call failed. Your credits were refunded. Please try again.",
-    "backToStart": "Start a new brainstorm"
+  "ideas": {
+    "title": "Generate Your Idea",
+    "subtitle": "Quick AI generation or guided brainstorming — choose your path.",
+    "quickGen": "Quick Generate",
+    "quickGenDesc": "AI analyzes trends + hackathon requirements to create a complete project idea in one shot.",
+    "chatQuiz": "Chat Quiz",
+    "chatQuizDesc": "Guided brainstorming with the AI — answer questions to refine your project design step by step.",
+    "yourIdea": "Your idea (optional)",
+    "recommendedTracks": "Recommended Tracks",
+    "generating": "Generating your idea...",
+    "uiDesignPrompt": "UI Design Prompt",
+    "backendDesignPrompt": "Backend Design Prompt",
+    "sources": "Sources & References",
+    "step": "Step {{step}}/6",
+    "answerPlaceholder": "Type your answer... (Enter to send)",
+    "result": "Your CyOps Prompt"
   },
-  "vote": {
-    "title": "Live Ticker",
-    "current": "Current votes",
-    "lastDelta": "Last delta",
-    "observedAt": "Last observed",
-    "history": "History (sparkline)",
-    "toastDeltaPositive": "+{{delta}} new vote{{s}} — +{{credits}} credits added to the pool",
-    "toastDeltaZero": "No new votes this poll",
-    "toastDeltaNegative": "{{delta}} votes this poll (downvote correction)",
-    "toastCreditsBlocked": "Pool dropped below 20 — AI requests are paused",
-    "toastCreditsRecovered": "Pool recovered above 20 — AI requests resumed"
-  },
-  "about": {
-    "title": "About this cookbook",
-    "purposeTitle": "Purpose",
-    "purpose": "The CyOpsArenaCookbook is a thin companion for CyOpsxMinimax hackathon participants. It packages the rules, the prize structure, the scoring rubric, and a Brainstorming-skill-driven prompt generator so you can move from 'rough idea' to 'CyOps-ready prompt' in minutes — not hours.",
-    "rubricTitle": "Scoring rubric",
-    "brainstormingTitle": "How the Brainstorming Skill Works",
-    "brainstorming": "The prompt generator is driven by the upstream obra/superpowers brainstorming skill: a Socratic state machine that asks one question at a time, walks you through intent → context → constraints → approaches → design → refine, and emits a JSON object that the route wraps into a CyOps front-matter + Markdown block. Every AI step costs 20 credits; the global pool starts at 1000 and earns +100 per observed net-new vote on the live arena."
+  "voteForMe": {
+    "title": "Vote for Us",
+    "subtitle": "Each vote adds +100 credits to the shared AI pool. Help everyone generate better ideas!",
+    "totalVotes": "Total Votes",
+    "creditsRemaining": "Credits Remaining",
+    "voteGrowth": "Vote Growth",
+    "liveActivity": "Live Vote Activity",
+    "voteCta": "Vote for Us on CyOps Arena",
+    "perVote": "+100 per vote · 20 per AI call"
   },
   "tracks": {
     "ship-a-feature": {

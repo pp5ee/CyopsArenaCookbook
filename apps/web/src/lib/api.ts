@@ -104,6 +104,32 @@ export const RUBRIC_DIMENSIONS: {
   { id: "implementation_innovation", titleKey: "rubric.innovation", weight: 8 },
 ];
 
+export interface QuickIdeaSource {
+  title: string;
+  url: string;
+  relevance: string;
+}
+
+export interface QuickIdeaProject {
+  projectTitle: string;
+  track: string;
+  tagline: string;
+  problem: string;
+  targetUsers: string;
+  solution: string;
+  techStack: string[];
+  keyFeatures: string[];
+  uiDesignPrompt: string;
+  backendDesignPrompt: string;
+  sources: QuickIdeaSource[];
+}
+
+export interface QuickIdeaResponse {
+  ok: boolean;
+  project: QuickIdeaProject;
+  balance: number;
+}
+
 export class ApiError extends Error {
   readonly status: number;
   readonly code: string;
@@ -162,6 +188,40 @@ export const api = {
 
   promptAnswer: (body: { sessionId: string; answer: string }) =>
     jsonFetch<PromptAnswerResponse>("/api/prompt/answer", {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+
+  quickIdea: (body: { idea?: string; locale?: string }) =>
+    jsonFetch<QuickIdeaResponse>("/api/ideas/quick", {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+
+  chatStreamStart: (body: { track?: string; freeText?: string; locale?: string }) =>
+    jsonFetch<{
+      type: string;
+      sessionId: string;
+      question: string;
+      step: number;
+      stepName: string;
+      balance: number;
+    }>("/api/ideas/chat-stream", {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+
+  chatStreamAnswer: (body: { sessionId: string; answer: string; locale?: string }) =>
+    jsonFetch<{
+      type: string;
+      sessionId?: string;
+      question?: string;
+      step?: number;
+      stepName?: string;
+      done?: boolean;
+      prompt?: string;
+      balance: number;
+    }>("/api/ideas/chat-stream", {
       method: "POST",
       body: JSON.stringify(body),
     }),

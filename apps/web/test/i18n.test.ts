@@ -26,9 +26,9 @@ describe("i18n parity", () => {
     expect(zhKeys).toEqual(enKeys);
   });
 
-  it("en.json has at least the four top-level nav entries", () => {
-    expect(Object.keys(en.nav).sort()).toEqual(
-      ["about", "guide", "prompt", "vote"].sort(),
+  it("en.json has the expected top-level sections", () => {
+    expect(Object.keys(en).sort()).toEqual(
+      ["common", "credits", "guide", "ideas", "landing", "rubric", "tracks", "voteForMe"].sort(),
     );
   });
 

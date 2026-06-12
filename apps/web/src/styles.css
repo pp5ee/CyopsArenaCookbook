@@ -12,8 +12,8 @@
     background-color: #0a0e17;
     color: #e2e8f0;
     min-height: 100vh;
+    overflow-x: hidden;
   }
-  /* Override browser autofill backgrounds */
   input:-webkit-autofill,
   input:-webkit-autofill:hover,
   input:-webkit-autofill:focus,
@@ -42,9 +42,170 @@
   .glow-text-accent-lg {
     text-shadow: 0 0 24px rgba(6, 182, 212, 0.8);
   }
+  .glow-pink {
+    text-shadow: 0 0 12px rgba(255, 45, 149, 0.6);
+  }
+  .glow-purple {
+    text-shadow: 0 0 12px rgba(176, 38, 255, 0.6);
+  }
+  .glow-green {
+    text-shadow: 0 0 12px rgba(57, 255, 20, 0.5);
+  }
 }
 
-/* Toast slide-in keyframe for the Live Ticker right-rail. */
+/* ── Cyberpunk grid background ── */
+@layer components {
+  .cyber-grid {
+    background-image:
+      linear-gradient(rgba(6, 182, 212, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(6, 182, 212, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .cyber-card {
+    background: linear-gradient(135deg, rgba(17, 24, 39, 0.95), rgba(17, 24, 39, 0.7));
+    border: 1px solid rgba(6, 182, 212, 0.2);
+    clip-path: polygon(
+      0% 8px, 8px 0%, calc(100% - 8px) 0%, 100% 8px,
+      100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0% calc(100% - 8px)
+    );
+  }
+
+  .cyber-card:hover {
+    border-color: rgba(6, 182, 212, 0.5);
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.15), inset 0 0 20px rgba(6, 182, 212, 0.03);
+  }
+}
+
+/* ── Splash shatter animation ── */
+.splash-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0a0e17;
+}
+
+.splash-image-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.splash-image-full {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: splash-zoom 2s ease-out forwards;
+}
+
+@keyframes splash-zoom {
+  0% { transform: scale(1.05); filter: brightness(0.8); }
+  50% { transform: scale(1); filter: brightness(1); }
+  100% { transform: scale(1.02); filter: brightness(1.1); }
+}
+
+/* Shatter grid overlay */
+.shatter-grid {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.shatter-fragment {
+  background-size: 600% 400%;
+  opacity: 1;
+  animation: shatter-out 1.2s ease-in forwards;
+}
+
+@keyframes shatter-out {
+  0% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--tx), var(--ty)) rotate(var(--rot)) scale(0.1);
+    opacity: 0;
+  }
+}
+
+/* ── Fade-in for main content ── */
+@keyframes fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out forwards;
+}
+
+/* ── Scan line overlay effect ── */
+.scan-lines {
+  position: relative;
+}
+.scan-lines::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ── Glow pulse ── */
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(6, 182, 212, 0.3), 0 0 20px rgba(6, 182, 212, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.5), 0 0 40px rgba(6, 182, 212, 0.2);
+  }
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+/* ── Data stream background lines ── */
+@keyframes data-stream {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 0% 100%; }
+}
+
+.data-stream-bg {
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(6, 182, 212, 0.02) 50%,
+    transparent 100%
+  );
+  background-size: 100% 200%;
+  animation: data-stream 3s linear infinite;
+}
+
+/* ── Toast slide-in ── */
 @keyframes slidein {
   0% {
     transform: translateX(120%);
@@ -54,4 +215,79 @@
     transform: translateX(0);
     opacity: 1;
   }
+}
+
+/* ── Chat bubble animations ── */
+@keyframes bubble-in {
+  0% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-bubble-in {
+  animation: bubble-in 0.3s ease-out forwards;
+}
+
+/* ── Typing cursor ── */
+@keyframes blink-cursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.typing-cursor::after {
+  content: "▊";
+  animation: blink-cursor 0.8s infinite;
+  color: #06B6D4;
+  margin-left: 2px;
+}
+
+/* ── Vote feed slide ── */
+@keyframes vote-slide-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-vote-slide-in {
+  animation: vote-slide-in 0.4s ease-out forwards;
+}
+
+/* ── Chart line draw ── */
+@keyframes draw-line {
+  0% {
+    stroke-dashoffset: 1000;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.chart-line-animate {
+  stroke-dasharray: 1000;
+  animation: draw-line 2s ease-out forwards;
+}
+
+/* ── Scrollbar styling ── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0e17;
+}
+::-webkit-scrollbar-thumb {
+  background: #1E293B;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #06B6D4;
 }

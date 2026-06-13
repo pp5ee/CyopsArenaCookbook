@@ -1,8 +1,8 @@
 // SplashScreen — Full-viewport cover with shatter animation.
-// Shows splash-cover.png for 2 seconds, then the image shatters
-// into a 6×4 grid of fragments that fly apart, revealing the app.
+// Shows arena-hero.png (from 64f6aa2425a2-image.png) full-viewport for 2s,
+// then the image shatters into a 6×4 grid of fragments that fly apart.
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import splashCover from "../assets/splash-cover.png";
+import splashCover from "../assets/arena-hero.png";
 
 interface SplashScreenProps {
   onDone: () => void;

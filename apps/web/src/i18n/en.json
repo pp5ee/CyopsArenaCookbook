@@ -14,7 +14,7 @@
     "toggleLanguage": "Switch language"
   },
   "credits": {
-    "label": "Credits",
+    "label": "Shared Pool",
     "poolLabel": "Shared Pool",
     "poolBlocked": "Pool Paused",
     "blocked": "AI requests are paused — the pool is below 20. Earn more by sharing or wait for the next vote grant."

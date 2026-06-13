@@ -21,9 +21,9 @@
   },
   "landing": {
     "tagline": "Turn your idea into a CyOps-ready prompt.",
-    "cta": "⚡ Generate Me an Idea",
+    "cta": "⚡ Gen me an idea",
     "votesLabel": "Arena Votes",
-    "poolHint": "credits remaining — shared by all participants"
+    "poolHint": "1000 credits shared by all participants"
   },
   "guide": {
     "title": "Hackathon Guide",

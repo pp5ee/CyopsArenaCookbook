@@ -21,9 +21,9 @@
   },
   "landing": {
     "tagline": "把你的想法变成 CyOps 可用的提示词。",
-    "cta": "⚡ 给我生成一个想法",
+    "cta": "⚡ 生成一个想法",
     "votesLabel": "Arena 投票",
-    "poolHint": "剩余积分——由所有参赛者共享"
+    "poolHint": "1000 积分由所有参赛者共享"
   },
   "guide": {
     "title": "黑客松指南",
